@@ -5,7 +5,7 @@ class Game {
         this.difficulty = 0; // if this variable is true, game is on hard mode. else, vice versa
         this.gameOverCounter = 4; // counter for number of mistakes allowable
         this.scoreCounter = 0;//keeps track of the players score    
-        this.index = 0;
+        this.index = 0;//
     }
 
     // starts the game!
@@ -16,16 +16,20 @@ class Game {
 
     // creates ordered keys according to sentence string
     orderedImageGenerator = () => {
-        let sentence = `hello there` //sequence of logical letters (just a sentence) Hi my name is alex costan and i'm an ironhacker. This is my first project which ofcourse is a video game. I hope this will help land me a job in a good company.
+        let sentence = `Hi my name is alex and i'm an ironhacker. this is my first project which is a typing game. i hope this game will help me land a developer job in a good company` //sequence of logical letters (just a sentence)
         let letters = sentence.replace(/ /g,'').toLowerCase().split('') //splits string into array of letters
-        let uhmm = keycapImages.find(letter => letter.alt == letters[this.index]);
+        let matchedImage = keycapImages.find(letter => letter.alt == letters[this.index]); // matches the letter image with the index of sentence
         if(this.index < letters.length) {
             this.index++;
         } 
         else {
+            this.finish = true;
             clearInterval(this.interval);
+            // window.cancelAnimationFrame(this.frameId);
+            // playAgain();
         }
-        return uhmm;
+        this.started = true;
+        return matchedImage;
     }
 
     // creates random keys from array of images
@@ -96,10 +100,11 @@ class Game {
                 ctx.fillText(`Lives: ${this.gameOverCounter}`, canvas.width - 175,(canvas.height / 20)); // displays players lives left
             }
             else if (this.difficulty === 2){ // normal mode
-                // if(key.y < -50|| !key.image) this.keys.splice(i, 1);
-                // try {
-                ctx.drawImage(key.image, key.x, key.y-=2, 50, 50); // draws images on the canvas slower
-                // } catch(err) { console.log(key); }
+                if(key.y < -50|| !key.image) this.keys.splice(i, 1);
+                    try {
+                        ctx.drawImage(key.image, key.x, key.y-=2, 50, 50); // draws images on the canvas slower
+                    } 
+                    catch(err) {console.log(key); }
                 ctx.fillStyle = "rgba(234, 28, 134, 1)";
                 ctx.font = "32px Roboto";
                 ctx.fillText(`Score: ${this.scoreCounter}`, 50, (canvas.height / 20)); // displays players score
@@ -140,6 +145,7 @@ class Game {
     //splices out images from key array when they go out of the y bounds of the canvas
     yBoundary = () => {
         for(let i=0; i<this.keys.length; i++){ //iterate through keys array
+            
             if(this.keys[i].y < 0){   
                 console.log(this.keys.splice(i, 1));
                 this.gameOverCounter--;
@@ -160,10 +166,10 @@ class Game {
         this.drawTargetArea(); 
         this.drawKeys();
         // console.log(this.keys.length);
-        // if(this.keys.length === 0) {
-        //     window.cancelAnimationFrame(this.frameId);
-        //     playAgain();
-        // }
+        if(this.keys.length === 0 && this.started && this.finish) {
+            window.cancelAnimationFrame(this.frameId);
+            playAgain();
+        }
         this.yBoundary();
         
         now   = Date.now();
