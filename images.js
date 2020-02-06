@@ -7,8 +7,8 @@ let createImage = function(src, title) {
     return img; 
 }
 
-let keycapImages = [];// array of images
-let letterImages = [];// array of letters
+let keycapImages = [];// array of images.
+let letterImages = [];// array of letters.
 
 // pushes images into an array
 keycapImages.push(createImage("imagesAndSounds/computer_key_A_T.png", "a"));

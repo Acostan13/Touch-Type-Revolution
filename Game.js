@@ -3,7 +3,7 @@ class Game {
     constructor() {
         this.keys = [];// array of keys
         this.difficulty = 0; // if this variable is true, game is on hard mode. else, vice versa
-        this.gameOverCounter = 4; // counter for number of mistakes allowable
+        this.gameOverCounter = 4; // counter for number of mistakes allowable.
         this.scoreCounter = 0;//keeps track of the players score    
         this.index = 0;//
     }
@@ -11,7 +11,7 @@ class Game {
     // starts the game!
     startGame = () => {  
         console.log("START") 
-        window.requestAnimationFrame(this.animate) //Starts the animation infinite loop
+        window.requestAnimationFrame(this.animate) //Starts the animation infinite loop.
     }
 
     // creates ordered keys according to sentence string
@@ -32,7 +32,7 @@ class Game {
         return matchedImage;
     }
 
-    // creates random keys from array of images
+    // creates random keys from array of images.
     randomImageGenerator = () => {
         return keycapImages[Math.floor(Math.random()*keycapImages.length)];
     }
