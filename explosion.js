@@ -14,11 +14,11 @@ canvas.height = window.innerHeight;
 
 // Options
 const background            = 'rgba(20, 196, 255, 1)';                    // Background color
-const particlesPerExplosion = 20;
-const particlesMinSpeed     = 3;
-const particlesMaxSpeed     = 6;
-const particlesMinSize      = 1;
-const particlesMaxSize      = 3;
+let particlesPerExplosion = 20;
+let particlesMinSpeed     = 3;
+let particlesMaxSpeed     = 6;
+let particlesMinSize      = 1;
+let particlesMaxSize      = 3;
 const explosions            = [];
 
 let fps        = 60;

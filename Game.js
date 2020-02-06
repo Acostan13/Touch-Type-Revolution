@@ -131,12 +131,16 @@ class Game {
         if(key.y > excellent.y && key.y + key.height < excellent.y+ excellent.h){
             console.log("excellent");
             this.playSound(); //notifies user they did an excellent job. WoW!
+            particlesPerExplosion = 7889;
             keyPressdown(key.x, key.y)// sets off explosions of reaffirmation
             this.scoreCounter+= 30; //increments score by thirty 
+
         }
         // when player successfully keysdown in 'nice' zone
         if(key.y > nice.y && key.y + key.height < nice.y+ nice.h){
             console.log("nice");
+            particlesPerExplosion = 79;
+            keyPressdown(key.x, key.y)// sets off explosions of reaffirmation
             //keyPressdown(key.x, key.y)
             this.scoreCounter+=10;//increments score by ten
         }
