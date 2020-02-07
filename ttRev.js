@@ -17,7 +17,7 @@ let speed = 50; // speed of type writer function
 
 let game = new Game(); // instantiation of game class
 
-//start button functionalities
+// start button functionalities
 // hard mode
 document.querySelector('#hard-mode').onclick = function() { //Start button is clicked 
     game.startGame() //calls startGame
@@ -39,21 +39,26 @@ document.querySelector('#easy-mode').onclick = function() { //Start button is cl
     clearHomePage()
 }
 
+// tutorial
+document.querySelector('#instructions').onclick = function() { //Start button is clicked 
+    window.location.pathname = '/instructionsBS.html';
+}
+
 // removes all elements on the home page
-function clearHomePage() {
+clearHomePage = () => {
     console.log(elemParent)
-    //elemParent.remove()
     elemParent.removeChild(elem);
 }
 
 // appears after game is over
-function playAgain() {    
+playAgain = () => {    
     game = new Game();
+    console.log(game, elemParent, elem)
     elemParent.appendChild(elem);  
 }
 
 // animates the intro screen to type the game title
-function typeWriter() {
+typeWriter = () => {
     if (i < txt.length) {
       document.getElementById("demo").innerHTML += txt.charAt(i);
       i++;
@@ -68,7 +73,6 @@ document.onkeydown = function(e) {//keydown function
         if(game.keys[i].image.alt == e.key){ //checks if the keycap image matches the key pressed down by the user
             game.successfulKeyPressdown(game.keys[i]); // calls function to see if keydown was pressed at the right time
             console.log(game.keys.splice(i, 1)); //slices out the image
-            console.log(game.keys[i])    
             return
         }
     }

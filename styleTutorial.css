@@ -1,0 +1,33 @@
+*{
+    margin: 0px; 
+    padding: 0px;
+    font-family: 'Roboto';
+}
+
+.jumbotron {
+    background-color: rgba(44, 42, 51, 1);
+    color: rgba(20, 196, 255, 1);
+    
+}
+
+h2 {
+   color: rgba(234, 28, 134, 1);
+}
+
+body button, a {
+    font-size: 20px;
+    background-color: rgba(234, 28, 134, 1);
+    color: white;
+    padding: 30px 80px;
+    border: 0;
+    box-shadow: 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+
+}
+
+.letsplay{
+    display: flex;
+    justify-content: center;
+}

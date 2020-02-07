@@ -3,32 +3,26 @@ class Game {
     constructor() {
         this.keys = [];// array of keys
         this.difficulty = 0; // if this variable is true, game is on hard mode. else, vice versa
-        this.gameOverCounter = 4; // counter for number of mistakes allowable.
+        this.gameOverCounter = 7; // counter for number of mistakes allowable.
         this.scoreCounter = 0;//keeps track of the players score    
-        this.index = 0;//
+        this.index = 0;// used to finish normal mode
     }
 
     // starts the game!
     startGame = () => {  
-        console.log("START") 
         window.requestAnimationFrame(this.animate) //Starts the animation infinite loop.
     }
 
     // creates ordered keys according to sentence string
     orderedImageGenerator = () => {
-        let sentence = `Hi my name is alex and i'm an ironhacker. this is my first project which is a typing game. i hope this game will help me land a developer job in a good company` //sequence of logical letters (just a sentence)
+        let sentence = `Hi my name is alex ` //sequence of logical letters (just a sentence) and i'm an ironhacker. this is my first project which is a typing game. Enjoy, and thanks for playing.......
         let letters = sentence.replace(/ /g,'').toLowerCase().split('') //splits string into array of letters
         let matchedImage = keycapImages.find(letter => letter.alt == letters[this.index]); // matches the letter image with the index of sentence
-        if(this.index < letters.length) {
-            this.index++;
-        } 
-        else {
-            this.finish = true;
-            clearInterval(this.interval);
-            // window.cancelAnimationFrame(this.frameId);
-            // playAgain();
+        this.index++;
+        if(this.index >= letters.length + 1) {
+            window.cancelAnimationFrame(this.frameId);
+            playAgain();
         }
-        this.started = true;
         return matchedImage;
     }
 
@@ -37,7 +31,7 @@ class Game {
         return keycapImages[Math.floor(Math.random()*keycapImages.length)];
     }
 
-    // creates random keys from array of images
+    // creates random letter from array of images
     randomLetterGenerator = () => {
         return letterImages[Math.floor(Math.random()*letterImages.length)];
     }
@@ -47,6 +41,7 @@ class Game {
         return sounds[Math.floor(Math.random()*sounds.length)].play();
     }
 
+    // key object factory
     keyGenerator = (generator) => {
         let key = {
         x: Math.random()*(canvas.width-50),
@@ -55,19 +50,19 @@ class Game {
         height: 50,
         image: generator() // finds the image associated with the indexed letters 
         }
-        this.keys.push(key)
+        this.keys.push(key) // pushes key objects into array to be drawn
     }
 
-    //creates image of letters, assigns starting position, and generates them every .6 seconds (easy mode)
+    //creates image of letters, assigns starting position, and generates them every .6 seconds (hard mode)
     hardMode = () => {
-        this.difficulty = 3;//sets mode to true in order to call the correct drawImage function with faster moving keys
-        setInterval(() => this.keyGenerator(this.randomImageGenerator), 600) // generates object every .6 seconds (easy mode)
+        this.difficulty = 3;//sets mode to true in order to call the correct drawImage function
+        setInterval(() => this.keyGenerator(this.randomImageGenerator), 800) // generates object every .6 seconds (easy mode)
     }
 
-    //creates image of letters, assigns starting position, and generates them every .6 seconds (easy mode)
+    //creates image of letters, assigns starting position, and generates them every 1 second (normal mode)
     normalMode = () => {
-        this.difficulty = 2;//sets mode to true in order to call the correct drawImage function with faster moving keys
-        this.interval = setInterval(() => this.keyGenerator(this.orderedImageGenerator), 800) // generates object every .6 seconds (easy mode)
+        this.difficulty = 2;//sets mode to true in order to call the correct drawImage function
+        this.interval = setInterval(() => this.keyGenerator(this.orderedImageGenerator), 1000) // generates object every .6 seconds (easy mode)
     }
 
     //creates image of letters, assigns starting position, and generates them every 1.2 seconds (easy mode)
@@ -75,6 +70,7 @@ class Game {
         this.difficulty = 1;
         setInterval(() => this.keyGenerator(this.randomLetterGenerator), 1200)
     }
+
 
     //draws the rectangular areas where users should be keying down
     drawTargetArea = () => {
@@ -87,7 +83,7 @@ class Game {
         ctx.fillRect(excellent.x,excellent.y, excellent.w, excellent.h);
     }
 
-    //loops through images array and draws them depending on mode selected
+    //loops through array of key images and draws them depending on mode selected
     drawKeys = () =>{
         this.keys.forEach((key,i)=>{
             if(this.difficulty === 3){// hard mode
@@ -100,11 +96,7 @@ class Game {
                 ctx.fillText(`Lives: ${this.gameOverCounter}`, canvas.width - 175,(canvas.height / 20)); // displays players lives left
             }
             else if (this.difficulty === 2){ // normal mode
-                if(key.y < -50|| !key.image) this.keys.splice(i, 1);
-                    try {
-                        ctx.drawImage(key.image, key.x, key.y-=2, 50, 50); // draws images on the canvas slower
-                    } 
-                    catch(err) {console.log(key); }
+                ctx.drawImage(key.image, key.x, key.y-=2, 50, 50); // draws images on the canvas slower
                 ctx.fillStyle = "rgba(234, 28, 134, 1)";
                 ctx.font = "32px Roboto";
                 ctx.fillText(`Score: ${this.scoreCounter}`, 50, (canvas.height / 20)); // displays players score
@@ -151,15 +143,16 @@ class Game {
             keyPressdown(key.x, key.y)// sets off explosions of reaffirmation
             this.scoreCounter+=10;//increments score by ten
         }
+        // subtracts score and lives when player doesn't keydown in target zones
         else {
             this.scoreCounter-=10;
+            this.gameOverCounter-=1;
         }
     }
 
     //splices out images from key array when they go out of the y bounds of the canvas
     yBoundary = () => {
         for(let i=0; i<this.keys.length; i++){ //iterate through keys array
-            
             if(this.keys[i].y < 0){   
                 console.log(this.keys.splice(i, 1));
                 this.gameOverCounter--;
@@ -173,17 +166,13 @@ class Game {
         }
     }
 
+
     //WHERE ALL THE MAGIC HAPPENS
     animate = () => { 
         this.frameId = window.requestAnimationFrame(this.animate); // creates animation effect on the canvas
         ctx.clearRect(0,0,canvas.width, canvas.height); //clears the whole canvas
         this.drawTargetArea(); 
         this.drawKeys();
-        // console.log(this.keys.length);
-        if(this.keys.length === 0 && this.started && this.finish) {
-            window.cancelAnimationFrame(this.frameId);
-            playAgain();
-        }
         this.yBoundary();
         
         now   = Date.now();
