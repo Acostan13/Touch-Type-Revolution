@@ -41,7 +41,9 @@ document.querySelector('#easy-mode').onclick = function() { //Start button is cl
 
 // tutorial
 document.querySelector('#instructions').onclick = function() { //Start button is clicked 
-    window.location.pathname = './instructionsBS.html';
+    //window.location.pathname = './instructionsBS.html';
+    console.log(90909909)
+    window.location.replace('./instructionsBS.html')
 }
 
 // removes all elements on the home page
