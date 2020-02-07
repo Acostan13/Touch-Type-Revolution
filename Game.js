@@ -131,18 +131,28 @@ class Game {
         if(key.y > excellent.y && key.y + key.height < excellent.y+ excellent.h){
             console.log("excellent");
             this.playSound(); //notifies user they did an excellent job. WoW!
-            particlesPerExplosion = 7889;
+            particlesPerExplosion = 60;//sets parameters for bigger particle explosion
+            particlesMinSpeed     = 9;
+            particlesMaxSpeed     = 18;
+            particlesMinSize      = 3;
+            particlesMaxSize      = 9;
             keyPressdown(key.x, key.y)// sets off explosions of reaffirmation
             this.scoreCounter+= 30; //increments score by thirty 
 
         }
         // when player successfully keysdown in 'nice' zone
-        if(key.y > nice.y && key.y + key.height < nice.y+ nice.h){
+        else if(key.y > nice.y && key.y + key.height < nice.y+ nice.h){
             console.log("nice");
-            particlesPerExplosion = 79;
+            particlesPerExplosion = 20;//sets parameters for particle explosions
+            particlesMinSpeed     = 3;
+            particlesMaxSpeed     = 6;
+            particlesMinSize      = 1;
+            particlesMaxSize      = 3;
             keyPressdown(key.x, key.y)// sets off explosions of reaffirmation
-            //keyPressdown(key.x, key.y)
             this.scoreCounter+=10;//increments score by ten
+        }
+        else {
+            this.scoreCounter-=10;
         }
     }
 

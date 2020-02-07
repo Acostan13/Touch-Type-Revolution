@@ -68,7 +68,7 @@ document.onkeydown = function(e) {//keydown function
         if(game.keys[i].image.alt == e.key){ //checks if the keycap image matches the key pressed down by the user
             game.successfulKeyPressdown(game.keys[i]); // calls function to see if keydown was pressed at the right time
             console.log(game.keys.splice(i, 1)); //slices out the image
-            console.log(game.keys[i])            
+            console.log(game.keys[i])    
             return
         }
     }
