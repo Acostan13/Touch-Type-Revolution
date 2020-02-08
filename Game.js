@@ -15,15 +15,21 @@ class Game {
 
     // creates ordered keys according to sentence string
     orderedImageGenerator = () => {
-        let sentence = `Hi my name is alex ` //sequence of logical letters (just a sentence) and i'm an ironhacker. this is my first project which is a typing game. Enjoy, and thanks for playing.......
+        let sentence = `Hi my name is alex and i'm an ironhacker. this is my first project which is a typing game. Enjoy, and thanks for playing` //sequence of logical letters (just a sentence)  
         let letters = sentence.replace(/ /g,'').toLowerCase().split('') //splits string into array of letters
         let matchedImage = keycapImages.find(letter => letter.alt == letters[this.index]); // matches the letter image with the index of sentence
-        this.index++;
-        if(this.index >= letters.length + 1) {
-            window.cancelAnimationFrame(this.frameId);
-            playAgain();
+        
+        // iterates through letters array if there are indices inside sentence
+        if(this.index < letters.length) {
+            this.index++;
+        } 
+        // clears the canvas when the game ends
+        else {
+            this.finish = true;
+            clearInterval(this.interval);
         }
-        return matchedImage;
+        this.started = true; // normal mode started boolean
+        return matchedImage; // returns the image that matches the letter from sentence
     }
 
     // creates random keys from array of images.
@@ -96,7 +102,11 @@ class Game {
                 ctx.fillText(`Lives: ${this.gameOverCounter}`, canvas.width - 175,(canvas.height / 20)); // displays players lives left
             }
             else if (this.difficulty === 2){ // normal mode
-                ctx.drawImage(key.image, key.x, key.y-=2, 50, 50); // draws images on the canvas slower
+                if(key.y < -50|| !key.image) this.keys.splice(i, 1);
+                try {
+                    ctx.drawImage(key.image, key.x, key.y-=2, 50, 50); // draws images on the canvas slower
+                } 
+                catch(err) {console.log(key); }
                 ctx.fillStyle = "rgba(234, 28, 134, 1)";
                 ctx.font = "32px Roboto";
                 ctx.fillText(`Score: ${this.scoreCounter}`, 50, (canvas.height / 20)); // displays players score
@@ -174,6 +184,12 @@ class Game {
         this.drawTargetArea(); 
         this.drawKeys();
         this.yBoundary();
+        
+        //ends normal mode
+        if(this.keys.length === 0 && this.started && this.finish) {
+            window.cancelAnimationFrame(this.frameId);
+            playAgain();
+        }
         
         now   = Date.now();
         delta = now - then;

@@ -24,10 +24,15 @@ body button, a {
     border-radius: 5px;
     margin-bottom: 20px;
     margin-top: 50px;
-
 }
 
 .letsplay{
     display: flex;
     justify-content: center;
 }
+
+a:hover {
+    text-decoration: none;
+    color: rgba(20, 196, 255, 1);
+}
+
